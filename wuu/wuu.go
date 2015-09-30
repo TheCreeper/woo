@@ -19,10 +19,14 @@ NAME
     wuu: command line pastebin.
 
 SYNOPSIS
-    command | curl -F '{{ .BaseURL }}'
+    command | curl -F 'http://{{ .BaseURL }}'
 
 DESCRIPTION
-    use <a href=''>this form</a> to paste from a browser
+    use <a href='data:text/html,<form action="http://{{ .BaseURL }}" method="post" accept-charset="utf-8"><textarea name="wuu" cols="80" rows="24"></textarea><br><button type="submit">submit</button></form>'>this form</a> to paste from a browser
+
+EXAMPLES
+    cat bin/ching | curl -F 'wuu=<-' http://{{ .BaseURL }}
+    curl http://{{ .BaseURL }}
 
 SEE ALSO
     http://github.com/TheCreeper/wuu
