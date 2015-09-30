@@ -11,6 +11,8 @@ import (
 )
 
 const html = `
+<html>
+<body>
 <style> a { text-decoration: none } </style>
 <pre>
 wuu(1)                                wuu                                wuu(1)
@@ -30,7 +32,9 @@ EXAMPLES
 
 SEE ALSO
     http://github.com/TheCreeper/wuu
-</pre>`
+</pre>
+</body>
+</html>`
 
 type Session struct{ *leveldb.DB }
 
@@ -49,7 +53,7 @@ func (s Session) HandleIndex(w http.ResponseWriter, req *http.Request) {
 		}
 
 		// Write out the paste bytes. This is kinda bad since its
-		// copying upto 1MB to memory on every request. It could
+		// copying upto 1MB to memory on every request. It might
 		// be better if the database interface returned an io.reader.
 		if _, err = w.Write(paste); err != nil {
 			http.Error(w,
@@ -113,6 +117,7 @@ func (s Session) HandleUpload(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
+	// Return the url of the paste.
 	uri := fmt.Sprintf("http://%s/%s\n", req.Host, pname)
 	if _, err := w.Write([]byte(uri)); err != nil {
 		http.Error(w,

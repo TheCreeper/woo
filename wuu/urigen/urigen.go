@@ -5,7 +5,7 @@ import (
 	"math/big"
 )
 
-const StdChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+const Symbols = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
 
 // Generate will attempt to generate a random set of bytes of the
 // specified size. There is no limit on the length.
@@ -20,13 +20,13 @@ func Generate(size int) (b []byte, err error) {
 	return
 }
 
-// RandChar returns a random character from StdChars.
+// RandChar returns a random character from Symbols.
 func RandChar() (c byte, err error) {
-	max := big.NewInt(int64(len(StdChars)))
+	max := big.NewInt(int64(len(Symbols)))
 	n, err := rand.Int(rand.Reader, max)
 	if err != nil {
 		return
 	}
-	c = StdChars[n.Int64()]
+	c = Symbols[n.Int64()]
 	return
 }
