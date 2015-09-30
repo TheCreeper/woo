@@ -83,6 +83,7 @@ func (s Session) HandleUpload(w http.ResponseWriter, req *http.Request) {
 	}
 
 	// Generate a random name for the paste.
+	// A string of 4 characters has about 500k possible combinations.
 	pname, err := urigen.Generate(4)
 	if err != nil {
 		http.Error(w,
