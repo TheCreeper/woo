@@ -5,9 +5,9 @@ and it'll give you a paste link.
 
 ## Usage
 
-Simply compile using the [go toolchain](https://golang.org/dl/) and specify
+Simply compile using the [go toolchain](https://golang.org/dl/) then specify
 a directory for the leveldb database to be stored using the "-db" flag.
-Bu default wuu listens on all interfaces which can be changed using the "-addr"
+By default wuu listens on all interfaces, this can be changed using the "-addr"
 flag.
 
 Start wuu.
