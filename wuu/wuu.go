@@ -36,9 +36,9 @@ SEE ALSO
 </body>
 </html>`
 
-type Session struct{ *leveldb.DB }
+type session struct{ *leveldb.DB }
 
-func (s Session) HandleIndex(w http.ResponseWriter, req *http.Request) {
+func (s session) HandleIndex(w http.ResponseWriter, req *http.Request) {
 	// Check if the client is requesting a paste.
 	uri := req.RequestURI[1:]
 	if len(uri) != 0 {
@@ -47,8 +47,8 @@ func (s Session) HandleIndex(w http.ResponseWriter, req *http.Request) {
 		paste, err := s.Get([]byte(uri), nil)
 		if err != nil {
 			http.Error(w,
-				http.StatusText(http.StatusBadRequest),
-				http.StatusBadRequest)
+				http.StatusText(http.StatusNotFound),
+				http.StatusNotFound)
 			return
 		}
 
@@ -81,7 +81,7 @@ func (s Session) HandleIndex(w http.ResponseWriter, req *http.Request) {
 	}
 }
 
-func (s Session) HandleUpload(w http.ResponseWriter, req *http.Request) {
+func (s session) HandleUpload(w http.ResponseWriter, req *http.Request) {
 	// Parse the paste with a max size of 1MB.
 	if err := req.ParseMultipartForm(1048576); err != nil {
 		http.Error(w,
@@ -127,7 +127,7 @@ func (s Session) HandleUpload(w http.ResponseWriter, req *http.Request) {
 	}
 }
 
-func Listen(dbname, addr string) (err error) {
+func Listen(addr, dbname string) (err error) {
 	db, err := leveldb.OpenFile(dbname, nil)
 	if err != nil {
 		return
