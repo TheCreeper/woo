@@ -134,7 +134,7 @@ func Listen(addr, dbname string) (err error) {
 	}
 	defer db.Close()
 
-	s := Session{db}
+	s := session{db}
 	mux := http.NewServeMux()
 	mux.Handle("/", verbs.Verbs{
 		Get:  s.HandleIndex,
