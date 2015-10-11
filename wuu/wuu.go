@@ -36,12 +36,17 @@ SEE ALSO
 </body>
 </html>`
 
+// session is a wrapper around the leveldb.DB object.
 type session struct{ *leveldb.DB }
 
-func (s session) HandleIndex(w http.ResponseWriter, req *http.Request) {
-	// Check if the client is requesting a paste.
+// RootHandler returns a handler that serves HTTP GET requests with the
+// compiled html template. If req.RequestURI is longer than 0 characters then
+// its assumed that the client is requesting a paste.
+func (s session) RootHandler(w http.ResponseWriter, req *http.Request) {
+	// Check if the client is requesting a paste. We don't want to serve
+	// any requests with a uri longer than 4 characters.
 	uri := req.RequestURI[1:]
-	if len(uri) != 0 {
+	if len(uri) != 0 && len(uri) <= 4 {
 		// Copy the contents of the paste from the database to
 		// memory.
 		paste, err := s.Get([]byte(uri), nil)
@@ -54,7 +59,7 @@ func (s session) HandleIndex(w http.ResponseWriter, req *http.Request) {
 
 		// Write out the paste bytes. This is kinda bad since its
 		// copying upto 1MB to memory on every request. It might
-		// be better if the database interface returned an io.reader.
+		// be better if the database interface returned an io.Reader.
 		if _, err = w.Write(paste); err != nil {
 			http.Error(w,
 				http.StatusText(http.StatusBadRequest),
@@ -81,7 +86,10 @@ func (s session) HandleIndex(w http.ResponseWriter, req *http.Request) {
 	}
 }
 
-func (s session) HandleUpload(w http.ResponseWriter, req *http.Request) {
+// UploadHandler returns a request handler that stores the contents of the
+// multipart form in the request as a "paste". The request is replied to with
+// the URL of the paste.
+func (s session) UploadHandler(w http.ResponseWriter, req *http.Request) {
 	// Parse the paste with a max size of 1MB.
 	if err := req.ParseMultipartForm(1048576); err != nil {
 		http.Error(w,
@@ -127,7 +135,10 @@ func (s session) HandleUpload(w http.ResponseWriter, req *http.Request) {
 	}
 }
 
-func Listen(addr, dbname string) (err error) {
+// Listen opens the database at the filepath dbname and listens on the TCP
+// network address addr. RootHandler and UploadHandler are registered as
+// handlers for Get and Post requests respectively.
+func Listen(dbname, addr string) (err error) {
 	db, err := leveldb.OpenFile(dbname, nil)
 	if err != nil {
 		return
@@ -137,7 +148,7 @@ func Listen(addr, dbname string) (err error) {
 	s := session{db}
 	mux := http.NewServeMux()
 	mux.Handle("/", verbs.Verbs{
-		Get:  s.HandleIndex,
-		Post: s.HandleUpload})
+		Get:  s.RootHandler,
+		Post: s.UploadHandler})
 	return http.ListenAndServe(addr, mux)
 }

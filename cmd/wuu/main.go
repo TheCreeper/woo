@@ -15,10 +15,7 @@ var (
 
 func init() {
 	flag.StringVar(&dbname, "db", "", "filepath of the database directory")
-	flag.StringVar(&addr,
-		"addr",
-		":8080",
-		"address of the interface to listen on")
+	flag.StringVar(&addr, "addr", "", "tcp network address to listen on")
 	flag.Parse()
 }
 
