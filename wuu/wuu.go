@@ -13,7 +13,6 @@ import (
 const html = `
 <html>
 <body>
-<style> a { text-decoration: none } </style>
 <pre>
 wuu(1)                                wuu                                wuu(1)
 
