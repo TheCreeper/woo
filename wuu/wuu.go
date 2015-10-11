@@ -21,7 +21,7 @@ NAME
     wuu: command line pastebin.
 
 SYNOPSIS
-    command | curl -F 'http://{{ .BaseURL }}'
+    command | curl -F 'wuu=<-' http://{{ .BaseURL }}
 
 DESCRIPTION
     Just post any data to this server and you'll get a "paste" link.
