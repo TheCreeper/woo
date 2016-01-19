@@ -4,7 +4,7 @@ import (
 	"flag"
 	"log"
 
-	"github.com/TheCreeper/wuu/wuu"
+	"github.com/TheCreeper/wuu"
 )
 
 // flags

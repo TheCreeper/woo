@@ -5,8 +5,8 @@ import (
 	"html/template"
 	"net/http"
 
-	"github.com/TheCreeper/wuu/wuu/urigen"
-	"github.com/TheCreeper/wuu/wuu/verbs"
+	"github.com/TheCreeper/wuu/urigen"
+	"github.com/TheCreeper/wuu/verbs"
 	"github.com/syndtr/goleveldb/leveldb"
 )
 
