@@ -137,7 +137,7 @@ func (s session) UploadHandler(w http.ResponseWriter, req *http.Request) {
 // Listen opens the database at the filepath dbname and listens on the TCP
 // network address addr. RootHandler and UploadHandler are registered as
 // handlers for Get and Post requests respectively.
-func Listen(dbname, addr string) (err error) {
+func Listen(addr, dbname string) (err error) {
 	db, err := leveldb.OpenFile(dbname, nil)
 	if err != nil {
 		return
@@ -146,8 +146,6 @@ func Listen(dbname, addr string) (err error) {
 
 	s := session{db}
 	mux := http.NewServeMux()
-	mux.Handle("/", verbs.Verbs{
-		Get:  s.RootHandler,
-		Post: s.UploadHandler})
+	mux.Handle("/", verbs.Verbs{Get: s.RootHandler, Post: s.UploadHandler})
 	return http.ListenAndServe(addr, mux)
 }
