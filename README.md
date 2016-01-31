@@ -17,5 +17,5 @@ wuu -db="~/wuudb"
 
 Start wuu and force listening to loopback interface.
 ```
-wuu -db="~/wuudb" -addr="localhost:8080"
+wuu -addr="localhost:8080" -db="~/wuudb"
 ```
